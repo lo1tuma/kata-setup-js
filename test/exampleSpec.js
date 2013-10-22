@@ -1,8 +1,10 @@
 var expect = require('chai').expect,
     _ = require('underscore');
 
-function sum(memo, num) {
-    return memo + num;
+function sum(cart) {
+    return _.reduce(_.values(cart), function (a, b) {
+        return a + b
+    }, 0);
 }
 
 function priceFor(cart) {
@@ -14,7 +16,7 @@ function priceFor(cart) {
             1: 1
         };
 
-    numberOfTotalItems = _.reduce(_.values(cart), sum, 0);
+    numberOfTotalItems = sum(cart);
     return discountFactorFor[differentProducts] * defaultBookPrice * numberOfTotalItems;
 }
 
@@ -33,5 +35,9 @@ describe('KataPotter', function () {
 
     it('charges 90 % of 24 EUR for three separate books', function () {
         expect(priceFor({book1: 1, book2: 1, book3: 1})).to.equal(21.6);
+    });
+
+    it('charges 95 % of 32 EUR for two copies of two separate books', function () {
+        expect(priceFor({book1: 2, book2: 2})).to.equal(30.4);
     });
 });
