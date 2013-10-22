@@ -1,7 +1,11 @@
 var expect = require('chai').expect;
 
-describe('the program', function () {
-    it('can handle the truth', function () {
-        expect(true).to.equal(true);
+function priceFor() {
+    return 8;
+}
+
+describe('KataPotter', function () {
+    it('charges 8 EUR for a single book', function () {
+        expect(priceFor({ book1: 1})).to.equal(8);
     });
 });
