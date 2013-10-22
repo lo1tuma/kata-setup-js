@@ -1,5 +1,9 @@
-var expect = require('chai').expect;
+var expect = require('chai').expect,
+    _ = require('underscore');
 
+function sum(memo, num) {
+    return memo + num;
+}
 
 function priceFor(cart) {
     var differentProducts = Object.keys(cart).length,
@@ -10,7 +14,8 @@ function priceFor(cart) {
             1: 1
         };
 
-    return discountFactorFor[differentProducts] * defaultBookPrice * ((cart.book1 || 0) + (cart.book2 || 0) + (cart.book3 || 0));
+    numberOfTotalItems = _.reduce(_.values(cart), sum, 0);
+    return discountFactorFor[differentProducts] * defaultBookPrice * numberOfTotalItems;
 }
 
 describe('KataPotter', function () {
