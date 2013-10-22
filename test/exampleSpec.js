@@ -4,20 +4,13 @@ var expect = require('chai').expect;
 function priceFor(cart) {
     var differentProducts = Object.keys(cart).length,
         defaultBookPrice = 8,
-        discount;
+        discountFactorFor = {
+            3: .9,
+            2: .95,
+            1: 1
+        };
 
-    discount = function (productCount) {
-        if (productCount === 3) {
-            return 0.9;
-        } else if (productCount === 2) {
-            return 0.95;
-        } else {
-            return 1;
-        }
-    };
-
-
-    return discount(differentProducts) * defaultBookPrice * ((cart.book1 || 0) + (cart.book2 || 0) + (cart.book3 || 0));
+    return discountFactorFor[differentProducts] * defaultBookPrice * ((cart.book1 || 0) + (cart.book2 || 0) + (cart.book3 || 0));
 }
 
 describe('KataPotter', function () {
