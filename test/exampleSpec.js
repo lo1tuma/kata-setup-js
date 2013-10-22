@@ -8,8 +8,7 @@ function sum(cart) {
 }
 
 function priceFor(cart) {
-    var differentProducts = Object.keys(cart).length,
-        defaultBookPrice = 8,
+    var defaultBookPrice = 8,
         discountFactorFor = {
             3: .9,
             2: .95,
@@ -17,7 +16,22 @@ function priceFor(cart) {
         },
         numberOfTotalItems = sum(cart);
 
-    return discountFactorFor[differentProducts] * defaultBookPrice * numberOfTotalItems;
+    var cartSum = 0;
+    while (numberOfTotalItems > 0) {
+        var uniqueItems = 0;
+        _.each(cart, function (value, key) {
+            if (value > 0) {
+                uniqueItems += 1;
+                cart[key] -= 1;
+            }
+        });
+
+        cartSum += discountFactorFor[uniqueItems] * uniqueItems * defaultBookPrice;
+
+        numberOfTotalItems = sum(cart);
+    }
+
+    return cartSum;
 }
 
 describe('KataPotter', function () {
@@ -46,6 +60,11 @@ describe('KataPotter', function () {
             cart: { book1: 2, book2: 2},
             cartTotal: 30.4,
             description: 'charges 95 % of 32 EUR for two copies of two separate books'
+        },
+        {
+            cart: { book1: 2, book2: 1},
+            cartTotal: 23.2,
+            description: 'charges 95 % of a pair of two different books and 8 EUR for the remaining book'
         }
     ];
 
