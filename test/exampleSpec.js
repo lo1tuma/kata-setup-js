@@ -2,18 +2,22 @@ var expect = require('chai').expect;
 
 
 function priceFor(cart) {
-    var differentCategories = Object.keys(cart).length,
-        discountFor2Products = 0.95,
-        discountFor3Products = 0.9,
-        defaultBookPrice = 8;
+    var differentProducts = Object.keys(cart).length,
+        defaultBookPrice = 8,
+        discount;
 
-    if(differentCategories === 3) {
-        return discountFor3Products * (3 * defaultBookPrice);
-    } else if(differentCategories === 2) {
-        return discountFor2Products * (2 * defaultBookPrice);
-    } else {
-        return cart.book1 * defaultBookPrice;
-    }
+    discount = function (productCount) {
+        if (productCount === 3) {
+            return 0.9;
+        } else if (productCount === 2) {
+            return 0.95;
+        } else {
+            return 1;
+        }
+    };
+
+
+    return discount(differentProducts) * defaultBookPrice * ((cart.book1 || 0) + (cart.book2 || 0) + (cart.book3 || 0));
 }
 
 describe('KataPotter', function () {
